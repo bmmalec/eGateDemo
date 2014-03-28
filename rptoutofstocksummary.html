@@ -1,0 +1,150 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title>eGate | Report</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="./css/jquery/jquery.mobile-1.4.1.min.css">
+    <link rel="stylesheet" href="./css/master.min.css">
+    <script src="./js/jquery/jquery.min.js"></script>
+    <script src="./js/jquery/jquery.mobile-1.4.1.min.js"></script>
+    <script src="./js/jquery/jquery.tmpl.min.js"></script>
+    <script src="./js/date.format.min.js"></script>
+    <script src="./js/exception.js"></script>
+    <script src="./js/dataaccess.js"></script>
+    <script src="./js/reports.min.js"></script>
+</head>
+<body>
+    <div data-role="page">
+        <div data-role="header" data-position="fixed">
+            <div data-role="navbar" data-iconpos="left">
+                <ul>
+                    <li><a href="#pnlSiteMenu" data-icon="home">Home</a></li>
+                    <li><a href="shoppingcart.html" rel="external" data-icon="star">Sales</a></li>
+                    <li><a href="#pnlReports" data-icon="grid">Reports</a></li>
+                </ul>
+            </div>
+            <h1><img src="./imgs/clear.gif" class="IconCharts" alt="" width="32" height="32" /> Out of Stock Summary</h1>
+            <a id="btnPrintReport" href="#popupNotEnabled" data-transition="pop" data-rel="popup" data-theme="b">Print</a>
+        </div>
+
+        <div data-role="content">
+            <select id="FlightInstanceID" data-native-menu="false" required="required">
+                <option>Select Flight</option>
+                <optgroup label="Scheduled Flights" id="FlightsOpen"></optgroup>
+                <optgroup label="Closed Flights" id="FlightsClosed"></optgroup>
+            </select>
+            <section id="Report"></section>
+        </div>
+
+        <div data-role="footer" data-position="fixed">
+            <span>© Copyright 2014</span>
+        </div>
+
+        <!-- Reports -->
+        <div id="pnlReports" data-role="panel" data-display="overlay">
+            <h2 data-rel="close"><img src="./imgs/clear.gif" class="IconCharts" alt="" width="32" height="32" />Reports</h2>
+            <ul data-role="listview">
+                <li><a>Out of Stock Summary</a></li>
+                <li><a href="#popupNotEnabled" data-rel="popup">Change Due</a></li>
+                <li><a href="#popupNotEnabled" data-rel="popup">Sales Summary</a></li>
+                <li><a href="rptstocksummary.html" data-rel="external" data-ajax="false">Stock Summary</a></li>
+                <li><a href="#popupNotEnabled" data-rel="popup">Payment</a></li>
+                <li><a href="#popupNotEnabled" data-rel="popup">Category Sales Summary</a></li>
+                <li><a href="#popupNotEnabled" data-rel="popup">Items Sold / PAX</a></li>
+            </ul>
+        </div>
+
+        <!-- Site Menu -->
+        <div id="pnlSiteMenu" data-role="panel" data-display="overlay" data-theme="b">
+            <ul data-role="listview">
+                <li><a href="barsetopen.html" rel="external" data-ajax="false">Barset</a></li>
+                <li><a href="flightopen.html" rel="external" data-ajax="false">Flight Select</a></li>
+                <li><a href="flightlogin.html" data-ajax="false" data-rel="external">FA Login</a></li>
+                <li><a href="shoppingcart.html" data-ajax="false" data-rel="external">Sales</a></li>
+                <li><a href="#pnlReports">Reports</a></li>
+                <li><a href="syncdevices.html" rel="external">Sync</a></li>
+                <li><a href="catering.html" rel="external" data-ajax="false">Catering</a></li>
+                <li><a href="#pnlSettings">Settings</a></li>
+                <li><a href="uplift.html" data-ajax="false" rel="external">Uplift</a></li>
+            </ul>
+        </div>
+
+        <!-- Settings -->
+        <div id="pnlSettings" data-role="panel" data-display="overlay">
+            <h3><a href="#" data-rel="close"><img src="./imgs/clear.gif" class="IconSettings" alt="" width="32" height="32" /> Settings</a></h3>
+            <hr />
+            <table style="width:100%">
+                <tr>
+                    <td><label for="AirportMode">Airplane Mode:</label></td>
+                    <td>
+                        <select name="flip-1" id="AirportMode" data-role="slider">
+                            <option value="0">Off</option>
+                            <option value="1">On</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td><label for="Wifi">Wi-Fi:</label></td>
+                    <td>
+                        <select name="flip-1" id="Wifi" data-role="slider">
+                            <option value="0">Off</option>
+                            <option value="1" selected="selected">On</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td><label for="Bluetooth">Bluetooth:</label></td>
+                    <td>
+                        <select name="flip-1" id="Bluetooth" data-role="slider">
+                            <option value="0">Off</option>
+                            <option value="1" selected="selected">On</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td><label for="Bluetooth">Screen Rotation:</label></td>
+                    <td>
+                        <select name="ScreenRotation" id="ScreenRotation" data-role="slider">
+                            <option value="0">Off</option>
+                            <option value="1" selected="selected">On</option>
+                        </select>
+                    </td>
+                </tr>
+            </table>
+        </div>
+
+        <!-- Popup/Not Enabled -->
+        <div id="popupNotEnabled" data-role="popup">
+            <p><img src="./imgs/clear.gif" class="IconInfo" alt="" width="32" height="32" /> Sorry, but this feature has not yet been enabled.</p>
+        </div>
+    </div>
+
+    <script id="FlightsTemplate" type="text/x-jquery-tmpl">
+        <option value="${FlightInstanceID}">Flight ${FlightNum} ${Origin}-${Dest}</option>
+    </script>
+    <script id="ReportTemplate" type="text/x-jquery-tmpl">
+        <div id="ReportTitle">${Title}</div>       
+        <section class="ui-body ui-body-a">            
+            <strong>Date:</strong> ${dateFormat(FlightDate, "mmm d, yyyy h:mm tt Z")}<br />
+            <strong>Aircraft Registration:</strong> ${TailNumber}<br />
+            <strong>Barset Number:</strong> ${BarsetNumber}<br />
+            <strong>PAX:</strong> ${PAX}
+        </section>
+        <table id="tblReport" data-role="table" class="ui-responsive table-stripe">
+            <thead>
+                <tr class="ui-bar-b">
+                {{if Columns}}
+                      {{each Columns}}<th>${$value}</th>{{/each}}
+                {{/if}}
+                </tr>
+            </thead>
+            <tbody>
+            {{if Rows}}
+                    {{each Rows}}<tr><td>${ItemName}</td><td>${Qty}</td></tr>{{/each}}
+            {{/if}}
+            </tbody>
+        </table>
+    </script>
+    <script src="./js/reports/outofstocksummary.js"></script>
+</body>
+</html>
